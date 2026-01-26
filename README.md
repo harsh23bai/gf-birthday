@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Birthday Love Letter Experience
 
-## Getting Started
+A cinematic, romantic, and animated birthday experience built with Next.js App Router, Tailwind CSS, Framer Motion, and a lightweight WebSocket chat.
 
-First, run the development server:
+## ✨ Features
+
+- Landing page countdown with animated background and music toggle
+- Passcode gate (two valid passcodes via environment variables)
+- Trailer page with cinematic loader and gated "Explore More" CTA
+- Surprise dashboard with chat, guestbook, poem, and gift reveal
+- Mobile-first design with glassmorphism and smooth transitions
+
+## 🚀 Getting Started
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Create a local environment file
+
+```bash
+copy .env.example .env.local
+```
+
+3. Update .env.local with your passcodes and (optional) WebSocket URL
+
+```env
+NEXT_PUBLIC_PASSCODE_ME=MYCODE123
+NEXT_PUBLIC_PASSCODE_HER=HERLOVE456
+NEXT_PUBLIC_PASSCODE_GUEST=GUEST000
+NEXT_PUBLIC_WS_URL=ws://localhost:4000
+MONGODB_URI=mongodb://localhost:27017
+MONGODB_DB=gf_birthday
+```
+
+4. Start the WebSocket server (for chat)
+
+```bash
+npm run dev:ws
+```
+
+5. Start the Next.js app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎬 Assets to Replace
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- public/trailer.mp4 → your birthday trailer video
+- public/bg.mp3 → background music
+- public/surprise.svg → replace with your real photo or image
 
-## Learn More
+## 🧠 Notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The chat is session-only and intended for a single celebration moment.
+- The passcode gate is symbolic (no real authentication).
+- Works best in modern browsers with audio/video autoplay policies.

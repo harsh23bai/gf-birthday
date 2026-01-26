@@ -20,7 +20,126 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #0b0b1a;
+  color: #f8f5ff;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(236, 72, 153, 0.35);
+}
+
+.romantic-gradient {
+  background: radial-gradient(1200px 800px at 10% 10%, rgba(244, 114, 182, 0.25), transparent 60%),
+    radial-gradient(900px 600px at 90% 20%, rgba(167, 139, 250, 0.22), transparent 55%),
+    radial-gradient(700px 700px at 50% 90%, rgba(250, 204, 21, 0.16), transparent 60%),
+    linear-gradient(180deg, #0b0b1a 0%, #0f0f26 50%, #0b0b1a 100%);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.text-glow {
+  text-shadow: 0 0 25px rgba(236, 72, 153, 0.45), 0 0 45px rgba(167, 139, 250, 0.3);
+}
+
+.subtle-border {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.otp-box {
+  width: 2.75rem;
+  height: 3.25rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f8f5ff;
+}
+
+.float-slow {
+  animation: floatSlow 8s ease-in-out infinite;
+}
+
+.float-medium {
+  animation: floatMedium 6s ease-in-out infinite;
+}
+
+.float-fast {
+  animation: floatFast 4.5s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulseGlow 2.8s ease-in-out infinite;
+}
+
+.soft-shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.fade-mask {
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 1) 12%, rgba(0, 0, 0, 1) 88%, transparent 100%);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes floatMedium {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-28px);
+  }
+}
+
+@keyframes floatFast {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-36px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 18px rgba(236, 72, 153, 0.35), 0 0 35px rgba(167, 139, 250, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.55), 0 0 60px rgba(167, 139, 250, 0.35);
+  }
 }

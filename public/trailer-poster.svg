@@ -1,0 +1,21 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#0b0b1a"/>
+  <circle cx="260" cy="190" r="220" fill="url(#paint0_radial)"/>
+  <circle cx="960" cy="520" r="240" fill="url(#paint1_radial)"/>
+  <text x="50%" y="50%" text-anchor="middle" fill="#FBCFE8" font-size="42" font-family="Arial" letter-spacing="6">
+    Birthday Trailer
+  </text>
+  <text x="50%" y="58%" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="18" font-family="Arial" letter-spacing="4">
+    Replace trailer.mp4 with your video
+  </text>
+  <defs>
+    <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(260 190) scale(220)">
+      <stop stop-color="#F472B6" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#0b0b1a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960 520) scale(240)">
+      <stop stop-color="#A78BFA" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#0b0b1a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
