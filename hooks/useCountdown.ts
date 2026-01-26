@@ -21,9 +21,18 @@ const getTimeLeft = (target: Date): TimeLeft => {
 
 export const useCountdown = (targetDate: Date) => {
   const target = useMemo(() => targetDate, [targetDate]);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => getTimeLeft(target));
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    total: 0,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
+    setTimeLeft(getTimeLeft(target));
     const interval = setInterval(() => {
       setTimeLeft(getTimeLeft(target));
     }, 1000);
@@ -32,6 +41,7 @@ export const useCountdown = (targetDate: Date) => {
 
   return {
     timeLeft,
-    isComplete: timeLeft.total <= 0,
+    isComplete: hasMounted && timeLeft.total <= 0,
+    hasMounted,
   };
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import AnimatedBackground from "../../components/AnimatedBackground";
@@ -12,36 +12,35 @@ export default function LoginPage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
 
-  const [meCode, herCode, guestCode] = useMemo(
-    () => [
-      process.env.NEXT_PUBLIC_PASSCODE_ME ?? "",
-      process.env.NEXT_PUBLIC_PASSCODE_HER ?? "",
-      process.env.NEXT_PUBLIC_PASSCODE_GUEST ?? "",
-    ],
-    []
-  );
-  const passcodeLength = Math.max(meCode.length, herCode.length, guestCode.length, 6);
+  const passcodeLength = Number(process.env.NEXT_PUBLIC_PASSCODE_LENGTH ?? 6);
 
-  const verify = useCallback(() => {
+  const verify = useCallback(async () => {
     if (!code) return;
-    if (code === meCode || code === herCode || code === guestCode) {
-      const role =
-        code === guestCode ? "guest" : code === herCode ? "her" : "me";
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+
+      if (!res.ok) {
+        setError("That passcode is not quite right.");
+        return;
+      }
+
+      const data = (await res.json()) as { role: "me" | "her" | "guest"; token: string };
       try {
-        sessionStorage.setItem("access_role", role);
+        sessionStorage.setItem("access_role", data.role);
+        sessionStorage.setItem("auth_token", data.token);
       } catch {
         // Ignore storage failures
       }
       setError("");
       router.push("/trailer");
-      return;
+    } catch {
+      setError("Something went wrong. Try again.");
     }
-    setError("That passcode is not quite right.");
-  }, [code, herCode, meCode, router]);
-
-  useEffect(() => {
-    if (code.length === passcodeLength) verify();
-  }, [code.length, passcodeLength, verify]);
+  }, [code, router]);
 
   return (
     <div className="relative min-h-screen overflow-hidden romantic-gradient">

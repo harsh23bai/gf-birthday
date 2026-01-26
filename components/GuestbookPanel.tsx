@@ -41,19 +41,16 @@ export default function GuestbookPanel({
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (!name.trim() || !message.trim()) return;
-    const entry = {
-      id: Math.random().toString(36).slice(2, 9),
-      name,
-      message,
-      createdAt: new Date().toISOString(),
-    };
-    setEntries((prev) => [entry, ...prev]);
     try {
-      await fetch("/api/guestbook", {
+      const res = await fetch("/api/guestbook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(entry),
+        body: JSON.stringify({ name, message }),
       });
+      if (res.ok) {
+        const saved = (await res.json()) as Entry;
+        setEntries((prev) => [saved, ...prev]);
+      }
     } catch {
       // ignore
     }

@@ -9,25 +9,47 @@ export type ChatMessage = {
   name?: string;
   timestamp: string;
   type: "message" | "typing";
+  roomId: string;
+  clientId?: string;
+  status?: "sending" | "sent" | "failed";
 };
 
 const makeId = () => Math.random().toString(36).slice(2, 10);
 
-export const useChatSocket = (displayName: string) => {
+type ChatEvent =
+  | { type: "typing"; sender: "me" | "her"; roomId: string }
+  | (ChatMessage & { type: "message" });
+
+export const useChatSocket = ({
+  displayName,
+  role,
+  token,
+  roomId,
+}: {
+  displayName: string;
+  role: "me" | "her";
+  token: string | null;
+  roomId: string;
+}) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<
+    "idle" | "connecting" | "connected" | "error"
+  >("idle");
   const wsRef = useRef<WebSocket | null>(null);
   const typingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const url = useMemo(
-    () =>
-      process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000",
+    () => process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000",
     []
   );
 
   useEffect(() => {
+    if (!token) return;
     const loadHistory = async () => {
       try {
-        const res = await fetch("/api/chat");
+        const res = await fetch("/api/chat", {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
         if (!res.ok) return;
         const data = (await res.json()) as ChatMessage[];
         setMessages(data.filter((msg) => msg.type === "message"));
@@ -38,34 +60,56 @@ export const useChatSocket = (displayName: string) => {
 
     loadHistory();
 
-    const ws = new WebSocket(url);
+    const ws = new WebSocket(`${url}?token=${encodeURIComponent(token)}`);
     wsRef.current = ws;
+    setConnectionStatus("connecting");
+
+    ws.onopen = () => setConnectionStatus("connected");
+    ws.onerror = () => setConnectionStatus("error");
+    ws.onclose = () => setConnectionStatus("error");
 
     ws.onmessage = (event) => {
       try {
-        const payload = JSON.parse(event.data);
+        const payload = JSON.parse(event.data) as ChatEvent;
         if (payload.type === "typing") {
+          if (payload.roomId !== roomId || payload.sender === role) return;
           setIsTyping(true);
           if (typingTimer.current) clearTimeout(typingTimer.current);
           typingTimer.current = setTimeout(() => setIsTyping(false), 1200);
           return;
         }
-        if (payload.type === "message") {
-          setMessages((prev) => [
-            ...prev,
-            ...(!prev.some((msg) => msg.id === payload.id)
-              ? [
-                  {
-                    id: payload.id ?? makeId(),
-                    text: payload.text,
-                    sender: payload.sender ?? "her",
-                    name: payload.name,
-                    timestamp: payload.timestamp ?? new Date().toISOString(),
-                    type: "message" as const,
-                  },
-                ]
-              : []),
-          ]);
+        if (payload.type === "message" && payload.roomId === roomId) {
+          setMessages((prev) => {
+            if (payload.clientId) {
+              const hasClient = prev.some(
+                (msg) => msg.clientId === payload.clientId
+              );
+              if (hasClient) {
+                return prev.map((msg) =>
+                  msg.clientId === payload.clientId
+                    ? { ...msg, id: payload.id, status: "sent" }
+                    : msg
+                );
+              }
+            }
+
+            if (prev.some((msg) => msg.id === payload.id)) return prev;
+
+            return [
+              ...prev,
+              {
+                id: payload.id,
+                text: payload.text,
+                sender: payload.sender,
+                name: payload.name,
+                timestamp: payload.timestamp,
+                type: "message" as const,
+                roomId: payload.roomId,
+                clientId: payload.clientId,
+                status: "sent",
+              },
+            ];
+          });
         }
       } catch {
         // Ignore malformed events
@@ -75,47 +119,76 @@ export const useChatSocket = (displayName: string) => {
     return () => {
       ws.close();
     };
-  }, [url]);
+  }, [url, token, roomId, role]);
 
-  const sendMessage = (
-    text: string,
-    sender: "me" | "her",
-    nameOverride?: string
-  ) => {
-    const payload = {
-      id: makeId(),
+  const sendMessage = async (text: string) => {
+    const clientId = makeId();
+    const optimistic: ChatMessage = {
+      id: clientId,
+      clientId,
       type: "message",
       text,
-      sender,
-      name: nameOverride ?? displayName,
+      sender: role,
+      name: displayName,
       timestamp: new Date().toISOString(),
+      roomId,
+      status: "sending",
     };
-    wsRef.current?.send(JSON.stringify(payload));
-    fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    }).catch(() => undefined);
+
     setMessages((prev) => [
       ...prev,
-      {
-        id: payload.id,
-        text,
-        sender,
-        name: payload.name,
-        timestamp: payload.timestamp,
-        type: "message",
-      },
+      optimistic,
     ]);
+
+    const wsPayload = {
+      type: "message",
+      text,
+      roomId,
+      clientId,
+    };
+
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify(wsPayload));
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify({ text, clientId }),
+      });
+      if (res.ok) {
+        const saved = (await res.json()) as ChatMessage;
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.clientId === clientId ? { ...saved, status: "sent" } : msg
+          )
+        );
+      }
+    } catch {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.clientId === clientId ? { ...msg, status: "failed" } : msg
+        )
+      );
+    }
   };
 
   const sendTyping = () => {
-    wsRef.current?.send(JSON.stringify({ type: "typing" }));
+    if (wsRef.current?.readyState !== WebSocket.OPEN) return;
+    wsRef.current.send(
+      JSON.stringify({ type: "typing", roomId, sender: role })
+    );
   };
 
   return {
     messages,
     isTyping,
+    connectionStatus,
     sendMessage,
     sendTyping,
   };

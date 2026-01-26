@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useChatSocket } from "../hooks/useChatSocket";
 import TypingIndicator from "./TypingIndicator";
@@ -13,11 +13,24 @@ export default function ChatPanel({
   const [input, setInput] = useState("");
   const [sender, setSender] = useState<"me" | "her">("me");
   const [localRole, setLocalRole] = useState<"me" | "her">("me");
-  const { messages, isTyping, sendMessage, sendTyping } = useChatSocket("You");
+  const [token, setToken] = useState<string | null>(null);
+  const roomId = useMemo(
+    () => process.env.NEXT_PUBLIC_CHAT_ROOM ?? "love-room",
+    []
+  );
+  const { messages, isTyping, connectionStatus, sendMessage, sendTyping } =
+    useChatSocket({
+      displayName: sender === "me" ? "You" : "Her",
+      role: sender,
+      token,
+      roomId,
+    });
 
   useEffect(() => {
     try {
       const role = sessionStorage.getItem("access_role");
+      const storedToken = sessionStorage.getItem("auth_token");
+      if (storedToken) setToken(storedToken);
       if (role === "her") {
         setSender("her");
         setLocalRole("her");
@@ -34,8 +47,7 @@ export default function ChatPanel({
   const submit = (event: FormEvent) => {
     event.preventDefault();
     if (!input.trim()) return;
-    const name = sender === "me" ? "You" : "Her";
-    sendMessage(input.trim(), sender, name);
+    sendMessage(input.trim());
     setInput("");
   };
 
@@ -48,7 +60,9 @@ export default function ChatPanel({
           </p>
           <h3 className="text-xl font-semibold text-white">Say something dreamy</h3>
         </div>
-        <span className="text-xs text-white/60">Saved to guestbook vault</span>
+        <span className="text-xs text-white/60">
+          {connectionStatus === "connected" ? "Connected" : "Connecting..."}
+        </span>
       </div>
 
       <div className="mt-4 text-xs uppercase tracking-[0.2em] text-white/60">
@@ -77,20 +91,37 @@ export default function ChatPanel({
           >
             <p className="text-white/90">{message.text}</p>
             <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/50">
-              {isLocal ? "You" : message.name ?? (localRole === "her" ? "He" : "Her")}
+              {isLocal ? "You" : localRole === "her" ? "He" : "Her"}
             </p>
+            {isLocal && message.status === "sending" && (
+              <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/40">
+                Sending...
+              </p>
+            )}
+            {isLocal && message.status === "failed" && (
+              <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-rose-200">
+                Failed — retry
+              </p>
+            )}
           </motion.div>
         );
         })}
-        {isTyping && <TypingIndicator />}
+        {isTyping && (
+          <TypingIndicator
+            label={localRole === "her" ? "He is typing" : "Her is typing"}
+          />
+        )}
       </div>
 
       <form onSubmit={submit} className="mt-5 flex gap-3">
         <input
           value={input}
           onChange={(event) => {
-            setInput(event.target.value);
-            sendTyping();
+            const value = event.target.value;
+            setInput(value);
+            if (value.trim().length > 0) {
+              sendTyping();
+            }
           }}
           placeholder="Type something warm..."
           className="flex-1 rounded-full bg-white/10 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40"

@@ -12,11 +12,11 @@ type CountdownProps = {
 };
 
 export default function Countdown({ targetDate, onComplete }: CountdownProps) {
-  const { timeLeft, isComplete } = useCountdown(targetDate);
+  const { timeLeft, isComplete, hasMounted } = useCountdown(targetDate);
 
   useEffect(() => {
-    if (isComplete) onComplete?.();
-  }, [isComplete, onComplete]);
+    if (hasMounted && isComplete) onComplete?.();
+  }, [hasMounted, isComplete, onComplete]);
 
   return (
     <div className="glass rounded-3xl px-6 py-8 md:px-10">
