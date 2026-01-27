@@ -21,7 +21,7 @@ export default function TrailerPage() {
           <video
             ref={videoRef}
             src="https://res.cloudinary.com/dn95byqcd/video/upload/v1769524025/demo_vid_sb5btw.mp4"
-            poster="https://res.cloudinary.com/dn95byqcd/video/upload/v1769524788/loading_poster_lqhxmz.mp4"
+            poster="https://res.cloudinary.com/dn95byqcd/image/upload/v1769525883/poster_cykqsd.svg"
             className="h-full w-full"
             autoPlay
             // muted

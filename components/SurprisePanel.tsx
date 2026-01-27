@@ -38,7 +38,7 @@ export default function SurprisePanel({
             >
               <div className="absolute -top-10 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-rose-400/30 blur-[90px]" />
               <motion.img
-                src="/surprise.svg"
+                src="https://res.cloudinary.com/dn95byqcd/image/upload/v1769525995/sup_gif_k40cdw.png"
                 alt="Surprise"
                 initial={{ filter: "blur(18px)", scale: 0.95 }}
                 animate={{ filter: "blur(0px)", scale: 1 }}
