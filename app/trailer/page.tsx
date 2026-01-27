@@ -20,13 +20,13 @@ export default function TrailerPage() {
         <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black/30">
           <video
             ref={videoRef}
-            src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            src="https://www.youtube.com/watch?v=__bNjF-xR1U&list=RD__bNjF-xR1U&start_radio=1"
             poster="/trailer-poster.svg"
             className="h-full w-full"
             autoPlay
-            muted
+            // muted
             playsInline
-            controls={false}
+            controls={True}
             preload="auto"
             disablePictureInPicture
             controlsList="nodownload noplaybackrate noremoteplayback"
@@ -42,7 +42,7 @@ export default function TrailerPage() {
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 flex items-center justify-center bg-black/70"
               >
-                <Loader label="Loading trailer" />
+                <Loader label="Loading Video.." />
               </motion.div>
             )}
           </AnimatePresence>

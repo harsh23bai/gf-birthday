@@ -34,10 +34,10 @@ export default function Home() {
             February 04, 2026
           </p>
           <h1 className="text-4xl font-semibold leading-tight text-white md:text-6xl text-glow">
-            Happy Birthday Himanshi..
+            Happiest Birthday
           </h1>
           <h2 className="text-4xl font-semibold leading-tight text-white md:text-6xl text-glow">
-            For the girl who turns ordinary moments into stardust.
+            to the girl who turns ordinary moments into stardust.
           </h2>
           <p className="mt-6 text-lg text-white/80 md:text-xl">
             A countdown to your favorite day, wrapped in light, music, and love.
