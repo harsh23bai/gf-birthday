@@ -26,7 +26,7 @@ export default function TrailerPage() {
             autoPlay
             // muted
             playsInline
-            controls={true}
+            controls={false}
             preload="auto"
             disablePictureInPicture
             controlsList="nodownload noplaybackrate noremoteplayback"
