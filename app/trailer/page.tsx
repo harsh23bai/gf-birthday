@@ -20,8 +20,8 @@ export default function TrailerPage() {
         <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black/30">
           <video
             ref={videoRef}
-            src="https://oehdgezicamuzoabelja.supabase.co/storage/v1/object/public/data_bday/2_Minute_Timer_with_Music_ELECTRIC_720p.mp4"
-            poster="/trailer-poster.svg"
+            src="https://res.cloudinary.com/dn95byqcd/video/upload/v1769524025/demo_vid_sb5btw.mp4"
+            poster="https://res.cloudinary.com/dn95byqcd/video/upload/v1769524788/loading_poster_lqhxmz.mp4"
             className="h-full w-full"
             autoPlay
             // muted
