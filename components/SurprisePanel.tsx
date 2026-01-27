@@ -46,7 +46,7 @@ export default function SurprisePanel({
                 className="mx-auto h-64 w-64 rounded-2xl object-cover shadow-2xl"
               />
               <p className="mt-4 text-lg text-white/90">
-                Your photo goes here — swap this with the real one.
+                Your Gift....
               </p>
               <button
                 onClick={() => setOpen(false)}

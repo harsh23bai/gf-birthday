@@ -11,7 +11,7 @@ type Entry = {
 };
 
 const seedEntries: Entry[] = [
-  { id: "1", name: "Your Love", message: "You light up every room you enter." },
+  
 ];
 
 export default function GuestbookPanel({

@@ -31,11 +31,14 @@ export default function Home() {
           className="max-w-2xl"
         >
           <p className="mb-4 text-sm uppercase tracking-[0.4em] text-rose-200/80">
-            January 26, 2026
+            February 04, 2026
           </p>
           <h1 className="text-4xl font-semibold leading-tight text-white md:text-6xl text-glow">
-            For the girl who turns ordinary moments into stardust.
+            Happy Birthday Himanshi..
           </h1>
+          <h2 className="text-4xl font-semibold leading-tight text-white md:text-6xl text-glow">
+            For the girl who turns ordinary moments into stardust.
+          </h2>
           <p className="mt-6 text-lg text-white/80 md:text-xl">
             A countdown to your favorite day, wrapped in light, music, and love.
           </p>
