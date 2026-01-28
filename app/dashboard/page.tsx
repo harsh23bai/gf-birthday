@@ -59,7 +59,7 @@ export default function DashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 text-center"
+          className="mb-10 text-center"
         >
           <p className="text-xs uppercase tracking-[0.35em] text-rose-200/70">
             Surprise Hub
@@ -73,7 +73,6 @@ export default function DashboardPage() {
             Four little worlds, each glowing with something for you.
           </p>
         </motion.div>
-
 
         {/* PANELS GRID */}
         <div
@@ -124,6 +123,14 @@ export default function DashboardPage() {
           )}
         </div>
 
+        {/* BACK TO TRAILER BUTTON — CENTERED */}
+        <div className="mt-14 flex justify-center sticky bottom-6">
+          <GlowButton
+            label="Back to Birthday Video 🎬"
+            onClick={() => router.push("/trailer")}
+          />
+        </div>
+
         {/* MODALS */}
         <Modal
           open={activePanel === "chat"}
@@ -157,13 +164,6 @@ export default function DashboardPage() {
           <SurprisePanel className="bg-transparent px-0 py-0" />
         </Modal>
       </div>
-        {/* BACK TO TRAILER BUTTON */}
-        <div className="mb-10 flex justify-center md:justify-start">
-          <GlowButton
-            label="Back to Birthday Video🎬"
-            onClick={() => router.push("/trailer")}
-          />
-        </div>
     </div>
   );
 }
