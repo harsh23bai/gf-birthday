@@ -12,36 +12,37 @@ export default function TrailerPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const [ready, setReady] = useState(false);
-  const [ended, setEnded] = useState(false);
-  const [muted, setMuted] = useState(true);
-  const [showSkip, setShowSkip] = useState(false);
+  const [ended, setEnded] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // show skip after 5 seconds
+  // detect mobile
   useEffect(() => {
-    const timer = setTimeout(() => setShowSkip(true), 5000);
-    return () => clearTimeout(timer);
+    setIsMobile(window.innerWidth < 768);
   }, []);
 
-  const toggleMute = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !muted;
-    setMuted(!muted);
+  const handleFullscreen = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.requestFullscreen) {
+      video.requestFullscreen();
+    } else if ((video as any).webkitEnterFullscreen) {
+      // iOS Safari
+      (video as any).webkitEnterFullscreen();
+    }
   };
 
   return (
     <div className="relative min-h-screen overflow-hidden romantic-gradient">
       <AnimatedBackground />
 
-      <div className="relative z-10 flex min-h-screen items-center justify-center">
-        {/* VIDEO CONTAINER */}
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10">
         <div
           className="
-            relative w-full
-            md:max-w-4xl
-            aspect-[9/16] md:aspect-video
-            overflow-hidden
-            rounded-none md:rounded-3xl
-            bg-black
+            relative w-full max-w-4xl 
+            overflow-hidden rounded-3xl 
+            border border-white/10 bg-black/30
+            aspect-video
           "
         >
           <video
@@ -50,7 +51,6 @@ export default function TrailerPage() {
             poster="https://res.cloudinary.com/dn95byqcd/image/upload/v1769525883/poster_cykqsd.svg"
             className="h-full w-full object-cover"
             autoPlay
-            muted
             playsInline
             preload="auto"
             controls={false}
@@ -58,7 +58,6 @@ export default function TrailerPage() {
             controlsList="nodownload noplaybackrate noremoteplayback"
             onCanPlay={() => setReady(true)}
             onEnded={() => setEnded(true)}
-            onClick={toggleMute}
             onContextMenu={(e) => e.preventDefault()}
           />
 
@@ -69,59 +68,46 @@ export default function TrailerPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 flex items-center justify-center bg-black/80"
+                className="absolute inset-0 flex items-center justify-center bg-black/70"
               >
-                <Loader label="Loading surprise..." />
+                <Loader label="Loading Video.." />
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Tap to unmute */}
-          <AnimatePresence>
-            {muted && ready && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/70 px-5 py-2 text-xs text-white backdrop-blur"
-              >
-                Tap to unmute 🔊
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Skip button */}
-          <AnimatePresence>
-            {showSkip && !ended && (
-              <motion.button
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                onClick={() => router.push("/dashboard")}
-                className="absolute right-4 top-4 rounded-full bg-black/60 px-4 py-2 text-xs text-white backdrop-blur"
-              >
-                Skip →
-              </motion.button>
-            )}
-          </AnimatePresence>
+          {/* MOBILE FULLSCREEN BUTTON */}
+          {isMobile && (
+            <button
+              onClick={handleFullscreen}
+              className="
+                absolute bottom-3 right-3 
+                rounded-full bg-black/70 
+                px-4 py-2 text-sm text-white
+                backdrop-blur-md
+              "
+            >
+              Fullscreen ⛶
+            </button>
+          )}
         </div>
-      </div>
 
-      {/* Explore button */}
-      <AnimatePresence>
-        {ended && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-20"
-          >
-            <GlowButton
-              label="Explore More ✨"
-              onClick={() => router.push("/dashboard")}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Explore Button */}
+        <AnimatePresence>
+          {ended && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="mt-10"
+            >
+              <GlowButton
+                label="Explore More ✨"
+                onClick={() => router.push("/dashboard")}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
