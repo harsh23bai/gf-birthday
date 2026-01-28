@@ -53,7 +53,7 @@ export default function TrailerPage() {
             autoPlay
             playsInline
             preload="auto"
-            controls={false}
+            controls={true}
             disablePictureInPicture
             controlsList="nodownload noplaybackrate noremoteplayback"
             onCanPlay={() => setReady(true)}
