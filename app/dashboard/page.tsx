@@ -62,13 +62,16 @@ export default function DashboardPage() {
           className="mb-10 text-center"
         >
           <p className="text-xs uppercase tracking-[0.35em] text-rose-200/70">
-            Surprise Hub
+            Billu's Hub
           </p>
 
           <h1 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
-            Everything I wanted you to feel
+            Everything I wanted you to feel is Happy
           </h1>
 
+          <p className="mt-3 text-sm text-white/70 md:text-base">
+           You used to be my everything
+          </p>
           <p className="mt-3 text-sm text-white/70 md:text-base">
             Four little worlds, each glowing with something for you.
           </p>
@@ -104,7 +107,7 @@ export default function DashboardPage() {
 
           {canAccess.includes("poem") && (
             <GlassCard
-              title="Birthday Poem"
+              title="Poem-e-dil"
               description="A romantic poem, line by line."
               icon="✍️"
               active={activePanel === "poem"}
