@@ -25,7 +25,7 @@ export default function GuestbookPanel({
   useEffect(() => {
     const loadEntries = async () => {
       try {
-        const res = await fet"use client";
+       fetch("/api/guestbook");
 
 import { FormEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -49,17 +49,21 @@ export default function GuestbookPanel({
   const [message, setMessage] = useState("");
 
   // Load wishes
-  useEffect(() => {
-    const loadEntries = async () => {
-      try {
-        const res = await fetch("/api/guestbook");
-        if (!res.ok) return;
-        const data = (await res.json()) as Entry[];
-        if (data.length > 0) setEntries(data);
-      } catch {}
-    };
-    loadEntries();
-  }, []);
+ useEffect(() => {
+  const loadEntries = async () => {
+    try {
+      const res = await fetch("/api/guestbook");
+      if (!res.ok) return;
+      const data = (await res.json()) as Entry[];
+      if (data.length > 0) setEntries(data);
+    } catch {
+      // ignore
+    }
+  };
+
+  loadEntries();
+}, []);
+
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
