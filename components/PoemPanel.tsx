@@ -3,11 +3,10 @@
 import { motion } from "framer-motion";
 
 const poemLines = [
-  "You are the hush before dawn and the spark right after.",
-  "The softest glow in my day, the surest home in my night.",
-  "In every laugh you leave light behind.",
-  "In every tear you teach me to hold the sky.",
-  "Today is yours, but you are forever my favorite day.",
+  "Special Friends are far and few.",
+  "But I wanna tell you that I'm blessed by you.",
+  "Your a true treasure I'll keep you in my Heart forever.",
+  "On your birthday, I wish you all the best.",
 ];
 
 export default function PoemPanel({

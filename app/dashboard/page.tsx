@@ -61,9 +61,9 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-10 text-center"
         >
-          <p className="text-xs uppercase tracking-[0.35em] text-rose-200/70">
+          <h3 className="text-xs uppercase tracking-[0.35em] text-rose-200/70">
             Billu's Hub
-          </p>
+          </h3>
 
           <h1 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
             Everything I wanted you to feel is Happy
@@ -87,8 +87,8 @@ export default function DashboardPage() {
         >
           {canAccess.includes("chat") && (
             <GlassCard
-              title="Chat"
-              description="Send sweet messages in real-time."
+              title="Chatify with Billo and Billu"
+              description=""
               icon="💬"
               active={activePanel === "chat"}
               onClick={() => openPanel("chat")}
@@ -97,8 +97,8 @@ export default function DashboardPage() {
 
           {canAccess.includes("guestbook") && (
             <GlassCard
-              title="Wishbook"
-              description="Collect warm wishes and memories."
+              title="Billo's Wishbook"
+              description=""
               icon="📖"
               active={activePanel === "guestbook"}
               onClick={() => openPanel("guestbook")}
@@ -108,7 +108,7 @@ export default function DashboardPage() {
           {canAccess.includes("poem") && (
             <GlassCard
               title="Poem-e-dil"
-              description="A romantic poem, line by line."
+              description=""
               icon="✍️"
               active={activePanel === "poem"}
               onClick={() => openPanel("poem")}
@@ -118,7 +118,7 @@ export default function DashboardPage() {
           {canAccess.includes("surprise") && (
             <GlassCard
               title="Surprise Gift"
-              description="A glowing reveal just for you."
+              description=""
               icon="🎁"
               active={activePanel === "surprise"}
               onClick={() => openPanel("surprise")}
