@@ -11,10 +11,11 @@ import { motion } from "framer-motion";
 import { useChatSocket } from "../hooks/useChatSocket";
 import TypingIndicator from "./TypingIndicator";
 
-const NAME_MAP = {
+const NAME_MAP: Record<"me" | "her" | "system", string> = {
   me: "Harsh",
   her: "Himanshi",
-} as const;
+  system: "System",
+};
 
 export default function ChatPanel({
   className = "glass flex h-[520px] flex-col rounded-3xl px-6 py-6",
