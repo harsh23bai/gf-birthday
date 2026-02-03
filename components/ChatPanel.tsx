@@ -11,6 +11,11 @@ import { motion } from "framer-motion";
 import { useChatSocket } from "../hooks/useChatSocket";
 import TypingIndicator from "./TypingIndicator";
 
+const NAME_MAP = {
+  me: "Harsh",
+  her: "Himanshi",
+} as const;
+
 export default function ChatPanel({
   className = "glass flex h-[520px] flex-col rounded-3xl px-6 py-6",
 }: {
@@ -28,7 +33,7 @@ export default function ChatPanel({
 
   const { messages, isTyping, connectionStatus, sendMessage, sendTyping } =
     useChatSocket({
-      displayName: sender === "me" ? "You" : "Her",
+      displayName: NAME_MAP[sender],
       role: sender,
       token,
       roomId,
@@ -70,9 +75,7 @@ export default function ChatPanel({
 
     setIsAtBottom(nearBottom);
 
-    if (nearBottom) {
-      setShowNewMsgBtn(false);
-    }
+    if (nearBottom) setShowNewMsgBtn(false);
   };
 
   /** -------------------- AUTO SCROLL (INCOMING ONLY) -------------------- */
@@ -102,7 +105,6 @@ export default function ChatPanel({
     sendMessage(input.trim());
     setInput("");
 
-    // Always scroll for your own message
     requestAnimationFrame(() => {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     });
@@ -126,7 +128,7 @@ export default function ChatPanel({
       </div>
 
       <div className="mt-4 text-xs uppercase tracking-[0.2em] text-white/60">
-        Sending as You
+        Sending as {NAME_MAP[localRole]}
       </div>
 
       {/* MESSAGES */}
@@ -158,7 +160,7 @@ export default function ChatPanel({
             >
               <p className="text-white/90">{message.text}</p>
               <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/50">
-                {isLocal ? "You" : localRole === "her" ? "He" : "Her"}
+                {NAME_MAP[message.sender]}
               </p>
             </motion.div>
           );
@@ -166,7 +168,7 @@ export default function ChatPanel({
 
         {isTyping && (
           <TypingIndicator
-            label={localRole === "her" ? "He is typing" : "Her is typing"}
+            label={`${localRole === "her" ? "Harsh" : "Himanshi"} is typing`}
           />
         )}
 
