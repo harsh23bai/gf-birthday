@@ -17,8 +17,9 @@ export async function POST(req: Request) {
   }
 
   let role: "me" | "her" | "guest" | null = null;
-  if (code === meCode) role = "me";
-  if (code === herCode) role = "her";
+
+  if (code === meCode) role = "me";       // ✅ Harsh
+  if (code === herCode) role = "her";     // ✅ Himanshi
   if (code === guestCode) role = "guest";
 
   if (!role) {
@@ -26,7 +27,12 @@ export async function POST(req: Request) {
   }
 
   const token = signToken({ role, roomId });
-  const response = NextResponse.json({ role, token });
+
+  const response = NextResponse.json({
+    role,
+    token,
+  });
+
   response.cookies.set({
     name: "auth_token",
     value: token,
@@ -36,5 +42,6 @@ export async function POST(req: Request) {
     maxAge: 60 * 60 * 24 * 30,
     secure: process.env.NODE_ENV === "production",
   });
+
   return response;
 }
