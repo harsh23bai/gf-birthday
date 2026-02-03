@@ -47,7 +47,7 @@ export default function TrailerPage() {
         >
           <video
             ref={videoRef}
-            src="https://res.cloudinary.com/dn95byqcd/video/upload/v1769524025/demo_vid_sb5btw.mp4"
+            src="https://drive.google.com/file/d/1qFSU6cyQ5o29JuPRVTzlyHyak62DRXyL/view?usp=drive_link"
             poster="https://res.cloudinary.com/dn95byqcd/image/upload/v1769525883/poster_cykqsd.svg"
             className="h-full w-full object-cover"
             autoPlay
